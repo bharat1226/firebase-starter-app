@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom'
+import { signOut } from './signOut'
 import { Button } from '../ui';
 
 export const StyledButton = styled(Button)`
@@ -11,8 +13,11 @@ export const StyledButton = styled(Button)`
     been signed in with Firebase Auth
 */
 export const SignOutButton = () => {
+    const history = useHistory()
     const onClickSignOut = async () => {
         // Firebase code goes here
+        await signOut();
+        history.push('/sign-in')
     }
 
     return (
