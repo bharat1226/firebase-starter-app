@@ -8,6 +8,7 @@ import {
     Modal,
     TextInput,
 } from '../ui';
+import {signIn} from './signIn'
 import { ResetPasswordForm } from './ResetPasswordForm';
 
 const Form = styled.div`
@@ -47,6 +48,12 @@ export const SignInForm = () => {
 
     const onSignInClicked = async () => {
         // Firebase code goes here
+        try {
+            await signIn(emailValue, passwordValue);
+            history.push('/');
+        } catch (e) {
+            setErrorMessage(e.message);
+        }
     }
 
     const onSignInWithGoogleClicked = async () => {
