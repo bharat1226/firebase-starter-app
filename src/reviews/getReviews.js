@@ -1,0 +1,27 @@
+import firebase from 'firebase/app';
+import { mapAsync } from '../util';
+import { getUserInfo } from '../user/getUserInfo';
+
+// Retrive data from firestore
+export const getReviews = async (restaurantId) => {
+	const querySnapshot = await firebase
+		.firestore()
+		.collection('reviews')
+		.where('restaurantId', '==', restaurantId)
+		.get();
+
+	const reviews = querySnapshot.docs.map((doc) => ({
+		id: doc.id,
+		...doc.data(),
+	}));
+
+	const populatedReviews = await mapAsync(reviews, async (review) => {
+		const author = await getUserInfo(review.userId);
+		return {
+			...review,
+			author,
+		};
+	});
+
+	return populatedReviews;
+};
